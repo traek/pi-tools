@@ -16,11 +16,12 @@ localPath = os.path.expanduser('~/Bookshelf/')
 
 print('Files will be written to \'' + localPath + '\'\n')
 for publication in catalog:
+    pubName = publication.findtext('NAME').replace('_','')
     for volume in publication.iter('ITEM'):
         url = volume.findtext('PDF')
         fileName = os.path.basename(urlparse(url).path)
         title = volume.findtext('TITLE')
-        label='[' + publication.tag + ' ' + title + ']: '
+        label='[' + pubName + ' ' + title + ']: '
         if os.path.exists(localPath + fileName):
             print(label + fileName + ' already exists')
         else:
