@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 """
 Bookshelf batch downloader for Raspberry Pi Press publications
 Author: Traek Malan
