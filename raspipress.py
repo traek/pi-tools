@@ -13,6 +13,15 @@ import requests
 bookshelf = requests.get('https://magpi.raspberrypi.com/bookshelf.xml')
 catalog = xt.ElementTree(xt.fromstring(bookshelf.content)).getroot()
 localPath = os.path.expanduser('~/Bookshelf/')
+if not os.path.exists(localPath):
+    localPath = os.getcwd() + '/'
+
+def humanread(number):
+    for unit in ['', 'K', 'M', 'G']:
+        if abs(number) < 1024.00:
+            return f'{number:3.2f} {unit}B'
+        number /= 1024.00
+    return f'{number:.2f} TB'
 
 print('Library location: \'' + localPath + '\'\n')
 for publication in catalog:
@@ -26,6 +35,6 @@ for publication in catalog:
             print(label + fileName + ' found')
         else:
             file = requests.get(url, stream=True)
-            size = file.headers.get('content-length')
-            print(label + 'Downloading \'' + fileName + '\' (' + size + ' bytes)')
+            size = humanread(int(file.headers.get('content-length')))
+            print(label + 'Downloading \'' + fileName + '\' (' + size + ')')
             open(localPath + fileName, 'wb').write(file.content)
